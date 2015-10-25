@@ -68,9 +68,15 @@ if [ -d /etc/yum/vars ]; then
 	cp -a /etc/yum/vars "$target"/etc/yum/
 fi
 
-yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
-    --setopt=group_package_types=mandatory -y groupinstall Core
-yum -c "$yum_config" --installroot="$target" -y clean all
+if [ -e /etc/dnf/dnf.conf ] ; then 
+	dnf -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
+		--setopt=group_package_types=mandatory -y groupinstall Core
+	dnf -c "$yum_config" --installroot="$target" -y clean all
+else
+	yum -c "$yum_config" --installroot="$target" --releasever=/ --setopt=tsflags=nodocs \
+    		--setopt=group_package_types=mandatory -y groupinstall Core
+	yum -c "$yum_config" --installroot="$target" -y clean all
+fi 
 
 cat > "$target"/etc/sysconfig/network <<EOF
 NETWORKING=yes

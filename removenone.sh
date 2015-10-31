@@ -21,13 +21,11 @@ usage () {
 
 check_root () {
 
-	if [ "$UID" -ne 0 ];then
+	if [ "$EUID" -ne 0 ];then
 		printf "%s\n" "You have to be root in order to use this script"
 		exit 1 
 	fi 
 }
-
-
 remove_image () {
 
 	for m in $(docker images | awk '{if ($1 ~ /\<none>/ ) print $3}');do

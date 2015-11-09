@@ -1,0 +1,14 @@
+---
+- name: write /etc/sysconfig/docker-storage-setup to be ready for d-s-s  
+  hosts: machines
+  vars: 
+       device: DEVICE
+       ose_docker_storage: https://raw.githubusercontent.com/ekuric/e_docker/master/docker-storage-setup_alternative_hacks/ose-docker-storage
+  tasks:
+    - name: download ose-docker-storage file to /tmp
+      get_url: url={{ ose_docker_storage }} dest=/tmp/ose-docker-storage mode=0744
+      remote_user: root 
+
+    - name: Execute script to create storage 
+      shell: /tmp/ose-docker-storage -s d -d {{ device }}
+      remote_user: root

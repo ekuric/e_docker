@@ -26,5 +26,5 @@ we do not collect any data
 ### Prerequisite for running 
  
  - It requires fully operational OSE v3 environment. Read [openshift ansible guilde ](https://github.com/openshift/openshift-ansible) how to set it up
- - SSH insde pods has to be enabled. Dockerfile which will build sshd enabled docker image can be found at [sshd enabled docker image ] (https://github.com/openshift/openshift-ansible )
+ - SSH insde pods has to be enabled. Dockerfile which will build sshd enabled docker image can be found at [sshd enabled docker Dockerfile] (https://github.com/ekuric/e_docker/blob/master/Dockerfile-sshd)
  - pods where test will be run, need to be created in advance. An example of script for bulk pod creatiion can be found here [bulk pod creation] (https://github.com/ekuric/e_docker/tree/master/poolpodcreate)

@@ -12,7 +12,7 @@
 
 Once executed as 
 
-`./fio-pod.sh -f <filename> -c <config_name> -d <test_directory>` 
+`./fio-pod.sh -f <filename> -c <config_name> -d <test_directory> -o <otheropt> ` 
 
 script will execute fio test inside pods whose ip addresses are collected to `filepod`. system pods such us router and/or docker-registry will 
 not be taken into consideration 
@@ -20,8 +20,13 @@ not be taken into consideration
 This scripts uses `pbench_fio` which is part of [pbench test harness](https://github.com/distributed-system-analysis/pbench) which will install fio 
 inside pods if not already done.
 
-`fio-pod` at host side will on all OSE nodes `regiter-tool-set` and pbench data will be collected from host side. From inside pods
-we do not collect any data 
+`fio-pod.sh` if use `-o|--otheropt` will accept any further `pbench_fio` option. This enables to change default `pbench_fio` 
+options by using `-o|--otheropt` switch with `fio-pod.sh`
+
+`fio-pod` will on all OSE nodes install pbench tools and run `register-tool-set --remote=<ose_node_ip> ` to register tools on all of them.
+ The pbench data will be collected from host side. From inside pods we do not collect any pbench data 
+
+
 
 ### Prerequisite for running 
  

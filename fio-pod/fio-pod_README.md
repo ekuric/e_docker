@@ -21,7 +21,7 @@ This scripts uses `pbench_fio` which is part of [pbench test harness](https://gi
 inside pods if not already done.
 
 `fio-pod.sh` if use `-o|--otheropt` will accept any further `pbench_fio` option. This enables to change default `pbench_fio` 
-options by using `-o|--otheropt` switch with `fio-pod.sh`
+options by using `-o|--otheropt` switch with `fio-pod.sh`. For full list of options provided by `pbench_fio` run `pbench_fio -h`
 
 `fio-pod` will on all OSE nodes install pbench tools and run `register-tool-set --remote=<ose_node_ip> ` to register tools on all of them.
  The pbench data will be collected from host side. From inside pods we do not collect any pbench data 

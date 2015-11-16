@@ -5,11 +5,13 @@
 # to be installed on OSE master and OSE nodes
 
 # variables
+
 fiobin="/opt/pbench-agent/bench-scripts/pbench_fio"
 podfile="podfile"
 config="fio_testing"
 testdir="/var/lib/docker"
 testtypes="read,write,rw,randread,randwrite,randrw"
+otheropt=""
 
 usage() {
     printf -- "./fio-pod.sh -f filepod -c config -d testdir\n"
@@ -17,6 +19,8 @@ usage() {
     printf -- "podfile - list of pod's ip addresses where test will be run\n"
     printf -- "config - string describing test, eg fio-ceph-run1, fio-rhs-run1...etc\n"
     printf -- "testdir - test destination - full path!Must exist prior test start - the best to ensure it exist via pod file\n"
+    printf -- "testtype - fio test type to run, list comma separated test, eg: read,write, randread \n"
+    printf -- "otheropt - run pbench_fio -h for list, quoted list of desired pbench_fio options - they will be passed to pbench_fio\n"
     exit 0
 }
 
@@ -26,7 +30,7 @@ if [ "$EUID" -ne 0 ]; then
     exit 0
 fi
 
-opts=$(getopt -q -o f:c:d:h --longoptions "filepod:,config:,testdir:,help" -n "getopt.sh" -- "$@");
+opts=$(getopt -q -o f:c:d:t:o:h --longoptions "filepod:,config:,testdir:,testtypes:,otheropt:,help" -n "getopt.sh" -- "$@");
 eval set -- "$opts";
 echo "processing options"
 while true; do
@@ -56,6 +60,14 @@ while true; do
             shift;
             if [ -n "$1" ]; then
                 testtypes="$1"
+                shift;
+            fi
+        ;;
+
+        -o|--otheropt)
+            shift;
+            if [ -n "$1" ]; then
+                otheropt="$1"
                 shift;
             fi
         ;;
@@ -98,7 +110,7 @@ tool-set-register() {
 
 # main
 run_test() {
-        $fiobin -d $testdir/fiotest --test-types="read,write,rw,randread,randwrite,randrw"  --config=$config --clients=$(cat $podfile.txt | awk -vORS=, '{ print $1 }' | sed 's/,$/\n/')
+        $fiobin -d $testdir/fiotest --test-types="$testtypes"  --config=$config --clients=$(cat $podfile.txt | awk -vORS=, '{ print $1 }' | sed 's/,$/\n/') $otheropt
 }
 
 write_podfile

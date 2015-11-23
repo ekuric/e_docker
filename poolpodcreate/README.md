@@ -4,14 +4,16 @@ poolpodcreate.sh scripts creates desired number of pods. It assumes working and 
 
 Usage:
 
+`#./poolpodcreate <action> IMAGE RANGE`
+
+- IMAGE - the docker image we want to use for pods
+- RANGE - how many pods we want to create 
+- action - can be create od delete 
+
 create pods 
 
-`#./poolpodcreate.sh <action> IMAGE RANGE`
+`# ./poolpodcreate.sh c <IMAGE> <RANGE>`
 
 delete pods 
 
-`#./poolcreate.sh d` 
-
-- <action> can be `c` - create, or `d` delete`
-- IMAGE - the docker image we want to use for pods
-- RANGE - how many pods we want to create 
+`#./poolpodcreate d`

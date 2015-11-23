@@ -53,17 +53,12 @@ EOF
 	COUNTER=$[$COUNTER+1]
 done
 
-printf "\n"
-printf "$RANGE pods were created...\n"
-printf " --------------------------- \n"
-
 }
 
 delete_pods() {
     for pod in $(oc get pods | grep pod- | awk '{ print $1 }') ; do
         oc delete pod $pod
     done
-    printf "Pods deleted\n"
 }
 
 case "$ACTION" in
@@ -74,4 +69,9 @@ case "$ACTION" in
     *)
         printf "Wrong option ... check again\n"; usage ;;
 esac
+
+printf "\n"
+printf "$RANGE pods were created...\n"
+printf " --------------------------- \n"
+
 

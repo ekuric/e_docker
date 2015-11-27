@@ -96,7 +96,7 @@ write_podfile() {
 tool-set-register() {
     for node in $(oc get nodes | awk '{print $1}'  | grep -v NAME); do
         # requires SSH passwordless login -- configure this in advance
-        if ( ssh -o StrictHostKeyChecking=no -nTx root@$node '[ ! -f /var/lib/pbench-agent/tools.default ]' ) ; then
+        if ( ssh -o StrictHostKeyChecking=no -nTx root@$node '[ ! -d /var/lib/pbench-agent/tools-default ]' ) ; then
             ssh -o StrictHostKeyChecking=no -nTx root@$node yum -y install pbench-*; source /opt/pbench-agent/profile; source /opt/pbench-agent/base
             register-tool-set --remote=$node
             printf "Tools registered for node : $node\n"

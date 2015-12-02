@@ -11,7 +11,7 @@ filepod="podfile"
 config="fio_testing"
 testtypes="read,write,rw,randread,randwrite,randrw"
 otheropt=""
-resultdir=$(hostname -s)-${config}
+resultdir=$(hostname -s)_OSE_pod_test
 
 
 
@@ -22,7 +22,7 @@ usage() {
     printf -- "config - string describing test, eg fio-ceph-run1, fio-rhs-run1...etc, default us config=fio_testing\n"
     printf -- "testtype - fio test type to run, list comma separated test, eg: read,write, randrread\n"
     printf -- "otheropt - run pbench_fio -h for list, quoted list of desired pbench_fio options - they will be passed to pbench_fio\n"
-    printf -- "resultdir - name for directory where results will be sent, can be omitted, default is $(hostname -s)-${config}\n"
+    printf -- "resultdir - name for directory where results will be sent, can be omitted, default is $(hostname -s)_OSE_pod_test\n"
     exit 0
 }
 
@@ -103,7 +103,7 @@ tool-set-register() {
     for node in $(oc get nodes | awk '{print $1}'  | grep -v NAME); do
         # requires SSH passwordless login -- configure this in advance
         if ( ssh -o StrictHostKeyChecking=no -nTx root@$node '[ ! -d /var/lib/pbench-agent/tools-default ]' ) ; then
-            ssh -o StrictHostKeyChecking=no -nTx root@$node yum -y install pbench-*; source /opt/pbench-agent/profile; source /opt/pbench-agent/base
+            ssh -o StrictHostKeyChecking=no -nTx root@$node yum -y install pbench-agent; source /opt/pbench-agent/profile; source /opt/pbench-agent/base
             register-tool-set --remote=$node
             printf "Tools registered for node : $node\n"
         else

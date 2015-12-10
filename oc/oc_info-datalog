@@ -1,0 +1,19 @@
+#!/bin/bash
+
+interval=$1
+file=$2
+pattern=$3
+
+oc_info() {
+	for component in rc nodes ep pods; do
+        	oc get -o wide --no-headers $component
+   	 done
+}
+cmd="oc_info"
+
+cat /dev/null >$file
+while true; do
+	echo "timestamp: `date +%s.%N`" >>$file
+	$cmd >>$file
+	sleep $interval
+done

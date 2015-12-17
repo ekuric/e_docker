@@ -1,0 +1,55 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "pod-999",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "hello-fio"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "pod-999",
+        "image": "r7perffio",
+	"volumeMounts": [
+		{
+			"mountPath": "/mnt/glusterfs",
+			"name": "glusterfsvol"
+		}
+	],
+        "ports": [
+          {
+            "containerPort": 22,
+            "protocol": "TCP"
+	  }
+        ],
+        "resources": {
+        },
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "capabilities": {},
+        "securityContext": {
+          "capabilities": {},
+          "privileged": false,	
+	  "command": "/usr/bin/init"
+        }
+      }
+    ],
+  "volumes": [
+	{
+		"name":"glusterfsvol",
+		"glusterfs": {
+			"endpoints": "glusterfs-cluster",	
+			"path": "glusterose",
+			"readOnly": false
+			}
+	}
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}

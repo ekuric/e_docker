@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-
 ACTION="$1"
 IMAGE="$2"
 RANGE="$3"
 COUNTER=0
 # script to create number of pods
+
 
 usage() {
     printf "./poolpodcreate <ACTION> [<IMAGE>] [<RANGE>] \n"
@@ -22,42 +22,73 @@ if  [ "$EUID" -ne 0 ]; then
     usage
     exit 0
 fi
-
 create_pods() {
     while [ $COUNTER -lt $RANGE ] ;do
 
-cat <<EOF > pod.yml
-apiVersion: v1
-kind: Pod
-metadata:
-      name: pod-$COUNTER
-spec:
-  containers:
-  - image: $IMAGE
-    name: pod-$COUNTER
-    securityContext:
-      privileged: False
-      command:
-      - /usr/bin/init
-    imagePullPolicy: IfNotPresent
-    volumeMounts:
-    - mountPath: "/perf1"
-      name: perf1
-  volumes:
-    - name: perf1
-      hostPath:
-        path: /perf1
+cat<<EOF >pod.json
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "pod-$COUNTER",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "hello-fio"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "pod-$COUNTER",
+        "image": "$IMAGE",
+	"volumeMounts": [
+		{
+			"mountPath": "/perf1",
+			"name": "perf1"
+		}
+	],
+        "ports": [
+          {
+            "containerPort": 22,
+            "protocol": "TCP"
+	  }
+        ],
+        "resources": {
+        },
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "capabilities": {},
+        "securityContext": {
+          "capabilities": {},
+          "privileged": false,	
+	  "command": "/usr/bin/init"
+        }
+      }
+    ],
+  "volumes": [
+	{
+		"name":"perf1",
+		"hostPath": {
+			"path": "/perf1"
+			}
+	}
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}
 EOF
-	printf " ------------------------\n" 
-	cat pod.yml | oc create -f -
-	COUNTER=$[$COUNTER+1]
-done
+	cat pod.json | oc create -f -
+	COUNTER=$[$COUNTER+1] 
+done 
 
 }
 
 delete_pods() {
     for pod in $(oc get pods | grep pod- | awk '{ print $1 }') ; do
-        oc delete pod $pod
+        oc delete pod $pod --grace-period=0
     done
 }
 
@@ -69,9 +100,6 @@ case "$ACTION" in
     *)
         printf "Wrong option ... check again\n"; usage ;;
 esac
-
 printf "\n"
 printf "$RANGE pods were created...\n"
 printf " --------------------------- \n"
-
-

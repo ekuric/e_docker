@@ -6,7 +6,7 @@
 
 # variables
 
-fiobin="/opt/pbench-agent/bench-scripts/pbench_fio"
+fiobin="/opt/pbench-agent/bench-scripts/pbench-fio"
 filepod="podfile"
 config="fio_testing"
 testtypes="read,write,rw,randread,randwrite,randrw"

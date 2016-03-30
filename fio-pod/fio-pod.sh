@@ -6,7 +6,7 @@
 
 # variables
 
-fiobin="/opt/pbench-agent/bench-scripts/pbench_fio"
+fiobin="/opt/pbench-agent/bench-scripts/pbench-fio"
 filepod="podfile"
 config="fio_testing"
 testtypes="read,write,rw,randread,randwrite,randrw"
@@ -91,7 +91,7 @@ done
 write_podfile() {
     # just taking into considerations pods created by this script
     rm $filepod.txt
-    for pod in $(oc get pods | awk '{print $1}'| egrep -v 'NAME|docker-registry|router');do
+    for pod in $(oc get pods --no-headers | awk '{print $1}'| egrep -v 'docker-registry|router');do
         oc describe pod $pod | grep IP | awk '{print $2}'>> $filepod.txt
     done
 }

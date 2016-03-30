@@ -1,0 +1,18 @@
+{
+	"apiVersion": "v1",
+	"kind": "PersistentVolume",
+	"metadata": {
+		"name": "pvname"
+	},
+	"spec": { 
+		"capacity": {
+		"storage": "XGi"
+		},
+		"accessModes": [ "ReadWriteOnce" ],
+		"awsElasticBlockStore": {
+			"fsType": "ext4",
+			"volumeID": "vol-id - from EC2 side"
+		},
+		"persistentVolumeReclaimPolicy": "Recycle"
+	}
+}

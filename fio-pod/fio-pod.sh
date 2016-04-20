@@ -92,7 +92,7 @@ write_podfile() {
     # just taking into considerations pods created by this script
     rm $filepod.txt
     for pod in $(oc get pods --no-headers | awk '{print $1}'| egrep -v 'docker-registry|router');do
-        oc describe pod $pod | grep IP | awk '{print $2}'>> $filepod.txt
+        oc describe pod $pod | grep IP\: | awk '{print $2}'>> $filepod.txt
     done
 }
 
